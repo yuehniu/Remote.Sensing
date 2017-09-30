@@ -14,8 +14,8 @@ function [ U, indicies, snrEstimate ] = hyperVca( M, q )
 %   snrEstimate - SNR estimate of data [dB]
 %
 % References
-%   J. M. P. Nascimento and J. M. B. Dias, “Vertex component analysis: A 
-% fast algorithm to unmix hyperspectral data,” IEEE Transactions on 
+%   J. M. P. Nascimento and J. M. B. Dias, vertex component analysis: A 
+% fast algorithm to unmix hyperspectral data,?IEEE Transactions on 
 % Geoscience and Remote Sensing, vol. 43, no. 4, apr 2005.
 
 %Initialization.
