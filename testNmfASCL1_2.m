@@ -3,17 +3,17 @@ clear all
 expTimes = 1;
 dataSize = 900;
 noiseLevel = 0.0;
-bandNum = 3;
-endNum = 3;
-HTrue = zeros(endNum, bandNum);
-HI = zeros(endNum, bandNum);
-HASCL1_2 = zeros(endNum, bandNum);
-WTrue = zeros(dataSize, endNum);
-WI = zeros(dataSize, endNum);
-WASCL1_2 = zeros(dataSize, endNum);
+bandNum = 4;
+emNum = 4;
+HTrue = zeros(emNum, bandNum);
+HI = zeros(emNum, bandNum);
+HASCL1_2 = zeros(emNum, bandNum);
+WTrue = zeros(dataSize, emNum);
+WI = zeros(dataSize, emNum);
+WASCL1_2 = zeros(dataSize, emNum);
 % for i = 1:exp_times
     % generate true W, H, V
-    HTrue = abs( randn( endNum, bandNum ) );
+    HTrue = abs( randn( emNum, bandNum ) );
     [V, W_true] = create4(dataSize, HTrue);
 %     max_V = max(V);
 %     for i = 1:bandNum
@@ -27,13 +27,13 @@ WASCL1_2 = zeros(dataSize, endNum);
 %     ylim([0,1])
     
     %% find initial H using n_findr
-    HInitIndx = nFindr(V, endNum);
+    HInitIndx = nFindr(V, emNum);
     HI = V(HInitIndx, :);
     
     alpha = 1;
     tol = 0.1;
     maxIter = 5000;
-    [WI, EI] = nmfAbundance(V, endNum, HI,...
+    [WI, EI] = nmfAbundance(V, emNum, HI,...
                         alpha, tol, maxIter);
     VASCL1_2 = WI * HI;
     
@@ -45,11 +45,11 @@ WASCL1_2 = zeros(dataSize, endNum);
     % factorize V using nmf_MDC_simple method
 
 %% ASCL1_2 test
-    random_ = 1;
+    random_ = 0;
     if random_
         % HI = abs(randn(size(HI)));
         % WI = abs(randn(size(WI)));
-        WI = WI ./ ( repmat( sum(WI,2),1, endNum ) );
+        WI = WI ./ ( repmat( sum(WI,2),1, emNum ) );
         [ WASCL1_2, HASCL1_2, SRcL1_2, errRcL1_2, objRcL1] = ...
             hyperNmfASCL1_2(...
                 V', HI', WI',...
@@ -65,7 +65,7 @@ WASCL1_2 = zeros(dataSize, endNum);
                 V', HI', WI',...
                 0.001,... % tolObj
                 20000,... % maxIter
-                5 ... %fDelta
+                20 ... %fDelta
                 );
         WMdcWellInit = WASCL1_2;
         HMdcWellInit = HASCL1_2;
@@ -80,9 +80,10 @@ WASCL1_2 = zeros(dataSize, endNum);
     scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'b');
     scatter( VASCL1_2(bandIndx1,:), VASCL1_2(bandIndx2,:), 5, 'k' );
     scatter( HASCL1_2(bandIndx1, :), HASCL1_2(bandIndx2,:) , 'filled','k')
-    plot(SRcL1_2(1, :,bandIndx1), SRcL1_2(1, :,bandIndx2), 'r-.', 'MarkerSize', 5);
-    plot(SRcL1_2(2, :,bandIndx1), SRcL1_2(2, :,bandIndx2), 'g-.', 'MarkerSize', 5);
-    plot(SRcL1_2(3, :,bandIndx1), SRcL1_2(3, :,bandIndx2), 'b-.',  'MarkerSize', 5);
+    
+    for i = 1:emNum
+        plot(SRcL1_2(i, :,bandIndx1), SRcL1_2(i, :,bandIndx2), 'r-.', 'MarkerSize', 5);
+    end
     
     figure;
     hold on;
