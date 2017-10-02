@@ -3,8 +3,8 @@ clear all
 expTimes = 1;
 dataSize = 900;
 noiseLevel = 0.0;
-bandNum = 3;
-endNum = 3;
+bandNum = 4;
+endNum = 4;
 HTrue = zeros(endNum, bandNum);
 HI = zeros(endNum, bandNum);
 HMdc = zeros(endNum, bandNum);
@@ -47,12 +47,12 @@ WMdc = zeros(dataSize, endNum);
 %% mdc test
     random_ = 0;
     if random_
-        HI = abs(randn(size(HI)));
-        WI = abs(randn(size(WI)));
+        % HI = abs(randn(size(HI)));
+        % WI = abs(randn(size(WI)));
         [ WMdc, HMdc, HRecord, E] = ...
             hyperNmfMDC(...
                 V, endNum, WI, HI, ...
-                0.001, 0.3,...
+                0.001, 4,...
                 0.01, 30000 );
         WMdcRandomInit = WMdc;
         HMdcRandomInit = HMdc;
@@ -60,7 +60,7 @@ WMdc = zeros(dataSize, endNum);
         [ WMdc, HMdc, HRecord, E] = ...
             hyperNmfMDC(...
                 V, endNum, WI, HI, ...
-                0.001, 0.3,...
+                0.001, 4,...
                 0.01, 30000 );
         WMdcWellInit = WMdc;
         HMdcWellInit = HMdc;

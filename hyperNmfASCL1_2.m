@@ -5,7 +5,7 @@
     % Hyperspectral Unmixing Via L1_2 Sparsity-constrained 
     % Nonnegative Matrix Factorization
 %-----------------------------------------------------------------------------------
-function [S, A, ARc] = hyperNmfASCL1_2(X, AInit, SInit, tolObj, maxIter, fDelta)
+function [S, A, ARc, errRc, objRc] = hyperNmfASCL1_2(X, AInit, SInit, tolObj, maxIter, fDelta)
 % Input:
 %     X: Hyperspectral data maxtrix (bandNum * sampleSize).
 %     AInit: Endmember intial matrix (bandNum * emNum).
@@ -17,12 +17,14 @@ function [S, A, ARc] = hyperNmfASCL1_2(X, AInit, SInit, tolObj, maxIter, fDelta)
 % Output:
 %     A: resultant endmember matrix (bandNum * emNum).
 %     S: resultant abundance matrix (emNum * sampleSize).
-
+%     ARc: iteraive record for endmember matrix (emNum * iterNum * bandNum)
+%     errRc: iterative record for error (iterNum).
+%     objRc: iterative record for object value (iterNum).
 
 % Estimate the number of enNum endmembers using the HySime algorithm.
 % Currenly, we omit this operation since we already know the number of 
 % endmember in synthetic data.
-emNum = 3;
+emNum = size(AInit, 2);
 
 
 % Estimate the weight parameter fLamda according to the sparsity measure
@@ -37,10 +39,17 @@ for l=1:bandNum
 end
 fLamda = tmp / sqrt(bandNum);
 
+% Record iteration.
+errRc = zeros(1, maxIter);
+objRc = zeros(1, maxIter);
+ARecord = zeros(emNum, maxIter, bandNum);
+
+% fLamda should be rescale to the level of spectral sample value
+fLamda = fLamda / 500;
+
 
 % Initialize A and S by randomly selecting entries in the interval [0 1].
 % Rescale each column of S to unit norm.
-ARecord = zeros(emNum, maxIter, bandNum);
 A = AInit;
 S = SInit;
 iterNum = 1;
@@ -49,39 +58,54 @@ iterNum = 1;
 % Run iterations.
 Xf = [ X; fDelta*ones(1, sampleNum) ];
 Af = [ A; fDelta * ones(1, emNum) ];
-newObj = 0.5 * norm( (Xf - Af*S), 2 )^2 + fLamda * fNorm(S, 1/2);
+err = 0.5 * norm( (Xf(1:bandNum,:) - Af(1:bandNum,:)*S), 2 )^2;
+newObj = err + fLamda * fNorm(S, 1/2);
 oldObj = 0;
 dispStr = ['Iteration ' num2str(iterNum),...
            ' loss = ' num2str(newObj)];
 disp(dispStr);
 
+% record iteration.
+errRc(iterNum) = err;
+objRc(iterNum) = newObj;
 for i = 1:emNum
     ARecord(i, iterNum, :) = A(1:bandNum, i);
 end
 
-while ( (oldObj-newObj)^2 >tolObj && (iterNum < maxIter) )
+while ( err >tolObj && (iterNum < maxIter) )
     oldObj = newObj;
     % update A
     A = Af .* (Xf*S') ./ (Af*S*S');
+    
+    % update S
+    lowLimit = 0.01;
+    S(find(S<lowLimit))  = lowLimit;
     S1_2 = S.^(-1/2);
-    upperLimit = 10;
-    S1_2(find(S1_2>upperLimit)) = upperLimit;
-%     S = S .* (A'*Xf) ./ (A'*A*S);
+    % upperLimit = 10;
+    % S1_2(find(S1_2>upperLimit)) = upperLimit;
+    % S = S .* (A'*Xf) ./ (A'*A*S);
     S = S .* (A'*Xf) ./ (A'*A*S + 0.5*fLamda*S1_2);
-    Xf = [ X; fDelta*ones(1, sampleNum) ];
-    Af = [ A(1:bandNum,:); fDelta * ones(1, emNum) ];
-    newObj = 0.5 * norm( (Xf - Af*S), 2 )^2 + fLamda * fNorm(S, 1/2);
+    % Xf = [ X; fDelta*ones(1, sampleNum) ];
+    % Af = [ A(1:bandNum,:); fDelta * ones(1, emNum) ];
+    Af = A;
+    err = 0.5 * norm( (Xf(1:bandNum,:) - Af(1:bandNum,:)*S), 2 )^2;
+    newObj = err + fLamda * fNorm(S, 1/2);
     
     iterNum = iterNum + 1;
     dispStr = ['Iteration ' num2str(iterNum),...
                 ' loss = ' num2str(newObj)];
     disp(dispStr);
     
+    % record iteration.
+    errRc(iterNum) = err;
+    objRc(iterNum) = newObj;
     for i = 1:emNum
         ARecord(i, iterNum, :) = A(1:bandNum, i);
     end
 end
 
 ARc = ARecord(:, 1:iterNum, :);
+errRc = errRc(1, 1:iterNum);
+objRc = objRc(1, 1:iterNum);
 
 end
