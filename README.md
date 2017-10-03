@@ -1,6 +1,9 @@
 # Remote.Sensing
 Hyperspectral image unmixing.
 
+## Contributor
+My.PC HengBao.Desktop
+
 ## create4.m getSynData.m
 Code for generating spectral samples with dirichlet distribution.
 
