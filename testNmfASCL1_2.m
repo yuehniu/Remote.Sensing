@@ -50,7 +50,7 @@ WASCL1_2 = zeros(dataSize, emNum);
         % HI = abs(randn(size(HI)));
         % WI = abs(randn(size(WI)));
         WI = WI ./ ( repmat( sum(WI,2),1, emNum ) );
-        [ WASCL1_2, HASCL1_2, SRcL1_2, errRcL1_2, objRcL1] = ...
+        [ WASCL1_2, HASCL1_2, HRcL1_2, errRcL1_2, objRcL1_2] = ...
             hyperNmfASCL1_2(...
                 V', HI', WI',...
                 0.001,... % tolObj
@@ -60,7 +60,7 @@ WASCL1_2 = zeros(dataSize, emNum);
         WMdcRandomInit = WASCL1_2;
         HMdcRandomInit = HASCL1_2;
     else
-        [ WASCL1_2, HASCL1_2, SRcL1_2, errRcL1_2, objRcL1] = ...
+        [ WASCL1_2, HASCL1_2, HRcL1_2, errRcL1_2, objRcL1_2] = ...
             hyperNmfASCL1_2(...
                 V', HI', WI',...
                 0.001,... % tolObj
@@ -82,11 +82,11 @@ WASCL1_2 = zeros(dataSize, emNum);
     scatter( HASCL1_2(bandIndx1, :), HASCL1_2(bandIndx2,:) , 'filled','k')
     
     for i = 1:emNum
-        plot(SRcL1_2(i, :,bandIndx1), SRcL1_2(i, :,bandIndx2), 'r-.', 'MarkerSize', 5);
+        plot(HRcL1_2(i, :,bandIndx1), HRcL1_2(i, :,bandIndx2), 'r-.', 'MarkerSize', 5);
     end
     
     figure;
     hold on;
     plot(errRcL1_2, 'r');
-    plot(objRcL1, 'k')
-    plot(objRcL1-errRcL1_2, 'm')
+    plot(objRcL1_2, 'k')
+    plot(objRcL1_2-errRcL1_2, 'm')
