@@ -57,10 +57,10 @@ WMdc = zeros(dataSize, endNum);
     %% visualize rest
     VNmf = HMvc * WMvc;
     figure;
-    emIndx1 = 1;
-    emIndx2 = 2;
-    scatter(V(:,emIndx1), V(:,emIndx2), 'c' ); hold on ; 
-    scatter(HTrue(:, emIndx1), HTrue(:, emIndx2), 'filled', 'r');
-    scatter(HI(:, emIndx1), HI(:, emIndx2), 'filled', 'b');
-    scatter( VNmf(emIndx1, :), VNmf(emIndx2, :), 5, 'k' );
-    scatter( HMvc(emIndx1,:), HMvc(emIndx2,:) , 'filled','k')
+    bandIndx1 = 1;
+    bandIndx2 = 2;
+    scatter(V(:,bandIndx1), V(:,bandIndx2), 'c' ); hold on ; 
+    scatter(HTrue(:, bandIndx1), HTrue(:, bandIndx2), 'filled', 'r');
+    scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'b');
+    scatter( VNmf(bandIndx1, :), VNmf(bandIndx2, :), 5, 'k' );
+    scatter( HMvc(bandIndx1,:), HMvc(bandIndx2,:) , 'filled','k')
