@@ -1,2 +1,5 @@
 # auto saved file
 *.asv
+
+# experiment result
+exp.result/
