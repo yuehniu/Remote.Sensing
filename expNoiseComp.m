@@ -1,8 +1,8 @@
 %% nmf_MDC_test with more than 3 endmembers
 clear all
 plot_ = false;
-random_ = true;
-expTimes = 2;
+random_ = false;
+expTimes = 50;
 dataSize = 900;
 noiseLevel = [1e-4, 3e-4, 0.001, 0.0032, 0.01, 0.0316, 0.1, 0.3];
 bandNum = 5;
@@ -15,8 +15,10 @@ abunTrueData = zeros(dataSize, emNum);
 abunInitData = zeros(dataSize, emNum);
 abunMdcResult = zeros(dataSize, emNum);
 abunMvcResult = zeros(dataSize, emNum);
+sadNfindr = zeros(emNum,expTimes);
 sadMdc = zeros(emNum,expTimes);
 sadMvc = zeros(emNum,expTimes);
+sadNfindrNoise = zeros(1, size(noiseLevel,2));
 sadMdcNoise = zeros(1, size(noiseLevel,2));
 sadMvcNoise = zeros(1, size(noiseLevel,2));
 
@@ -62,7 +64,18 @@ for exp_ = 1:expTimes
         scatter(emInitData(:, 1), emInitData(:, 2), 'full');
     end
     
-    % factorize V using nmf_MDC_simple method
+    emNfindrDataIndex = nFindr(hyperData, emNum);
+    emNfindrData = hyperData(emNfindrDataIndex, :);
+    for em_i = 1:emNum
+        tmp_sad = inf;
+        for em_j = 1:emNum
+            cur_sad = sad(emTrueData(em_j,:)', emNfindrData(em_i,:)');
+            if cur_sad<tmp_sad
+                tmp_sad = cur_sad;
+            end     
+        end
+        sadNfindr(em_i, exp_) = sadNfindr(em_i, exp_) + tmp_sad;
+    end
 
 %% mdc test
     if random_
@@ -288,6 +301,7 @@ for exp_ = 1:expTimes
 end
 
 %% 
+sadNfindrNoise(nl_) = sum(sum(sadNfindr))/expTimes/emNum;
 sadMdcNoise(nl_) = sum(sum(sadMdc))/expTimes/emNum;
 sadMvcNoise(nl_) = sum(sum(sadMvc))/expTimes/emNum;
 
@@ -302,9 +316,10 @@ end
 figure;
 hold on
 nsr = 10*log10(1./noiseLevel);
+plot(nsr, sadNfindrNoise/180*pi, 'm-*', 'LineWidth', 2);
 plot(nsr, sadMdcNoise/180*pi, 'r--*', 'LineWidth', 2);
 plot(nsr, sadMvcNoise/180*pi, '--*', 'LineWidth', 2);
 
 xlabel('NSR(db)', 'FontSize', 15, 'FontWeight', 'bold')
 ylabel('SAD', 'FontSize', 15, 'FontWeight', 'bold')
-legend('MDC-NMF', 'MVC-NMF', 'Orientation', 'Vertical')
+legend('Nfindr','MDC-NMF', 'MVC-NMF', 'Orientation', 'Vertical')
