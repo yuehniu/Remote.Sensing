@@ -284,8 +284,8 @@ for expIndex = 1:expTimes
 end
 
 %% 
-sadMdcAv = sum(sadMdc, 2)/expTimes;
-sadMvcAv = sum(sadMvc, 2)/expTimes;
+sadMdcAv = sum(sadMdc, 2)/expTimes/180*pi;
+sadMvcAv = sum(sadMvc, 2)/expTimes/180*pi;
 %-- plot(sadMdc/expTimes, 'r--*', 'LineWidth', 2); hold on
 %-- plot(sadMvc/expTimes, '--*', 'LineWidth', 2)
 %-- xlabel('Experimets', 'FontSize', 15, 'FontWeight', 'bold')
