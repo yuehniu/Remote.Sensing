@@ -62,9 +62,9 @@ iterNum = 1;
 
 
 % Run iterations.
-Xf = [ X fDelta*ones(sampleNum, 1) ];
-Af = [ A fDelta * ones(emNum, 1) ];
-err = 0.5 * norm( (Xf(:, 1:bandNum) - S*Af(:, 1:bandNum)), 2 )^2;
+Xf = [ X fDelta * ones(sampleNum, 1) ];
+A = [ A fDelta * ones(emNum, 1) ];
+err = 0.5 * norm( (Xf(:, 1:bandNum) - S*A(:, 1:bandNum)), 2 )^2;
 newObj = err + fLamda * fNorm(S, 1/2);
 oldObj = 0;
 dispStr = ['Iteration ' num2str(iterNum),...
@@ -81,7 +81,8 @@ end
 while ( err >tolObj && (iterNum < maxIter) )
     oldObj = newObj;
     % update A
-    A = Af .* ((S'*Xf)+(dDelta * P * Af)) ./ ((S'*S+(2*dDelta * I))*Af);
+    A = A .* ((S'*Xf)+(dDelta * P * A)) ./ ((S'*S+(2*dDelta * I))*A);
+    A(:, emNum+1) = fDelta * ones(emNum, 1);
     
     % update S
     lowLimit = 0.01;
@@ -93,8 +94,8 @@ while ( err >tolObj && (iterNum < maxIter) )
     S = S .* (Xf*A') ./ (S*A*A' + 0.5*fLamda*S1_2);
     % Xf = [ X; fDelta*ones(1, sampleNum) ];
     % Af = [ A(1:bandNum,:); fDelta * ones(1, emNum) ];
-    Af = A;
-    err = 0.5 * norm( (Xf(:, 1:bandNum) - S*Af(:,1:bandNum)), 2 )^2;
+    % A = A;
+    err = 0.5 * norm( (Xf(:, 1:bandNum) - S*A(:,1:bandNum)), 2 )^2;
     newObj = err + fLamda * fNorm(S, 1/2);
     
     iterNum = iterNum + 1;
@@ -111,6 +112,7 @@ while ( err >tolObj && (iterNum < maxIter) )
 end
 
 ARc = ARecord(1:iterNum, :, :);
+A = A(:,1:bandNum);
 errRc = errRc(1, 1:iterNum);
 objRc = objRc(1, 1:iterNum);
 
