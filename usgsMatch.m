@@ -1,5 +1,5 @@
 %% read binary usgs file
-fileHandle= fopen('../data/Cup95RefEm.sli', 'rb');
+fileHandle= fopen('./data/Cup95RefEm.sli', 'rb');
 cupLib = fread(fileHandle, [50, 38], 'single');
 cupSpectrum  = 1000 * [1.990800, 2.000900, 2.010900, 2.020900, 2.030900, 2.040900, 2.050900, ...
  2.060900, 2.071000, 2.081000, 2.091000, 2.101000, 2.111000, 2.121000, ...
@@ -13,99 +13,111 @@ cupSpectrum  = 1000 * [1.990800, 2.000900, 2.010900, 2.020900, 2.030900, 2.04090
 figure(1)
 
 subplot(231)
-emMdc = H_test_orig(:,7)/1000;
-emNfindr = H_I_orig(:,7)/1000;
+emMvc = HMvcOrig(:,7)/1000;
+emMvcAscl1_2 = HMdcAscl1_2Orig(:,7)/1000;
+emNfindr = HNfindrOrig(:,7)/1000;
 emRef = cupLib(:,5);
 plot(cupSpectrum,emRef, 'k--', 'LineWidth', 2)
 ylim([0, 1])
 hold on
-plot(cupSpectrum, emMdc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvcAscl1_2, 'b', 'LineWidth', 2)
 plot(cupSpectrum, emNfindr , 'g', 'LineWidth', 2)
 ylabel('reflectance(%)')
 xlabel('wavelength (nm)')
 title('Nontronite', 'FontSize', 20)
-legend('Lib', 'MDC', 'NFINDR')
-sad(emRef, emMdc)
+legend('Lib', 'MVC', 'MDSC', 'NFINDR')
+sad(emRef, emMvc)
 sad(emRef, emNfindr)
 
 subplot(232)
-emNfindr = H_I_orig(:,3)/1200;
+emNfindr = HNfindrOrig(:,3)/1200;
 emRef = cupLib(:,11);
-emMdc = H_test_orig(:,3)/1400;
+emMvc = HMvcOrig(:,3)/1400;
+emMvcAscl1_2 = HMdcAscl1_2Orig(:,3)/1400;
 plot(cupSpectrum, emRef, 'k--', 'LineWidth', 2)
 ylim([0, 1])
 hold on
-plot(cupSpectrum, emMdc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvcAscl1_2, 'b', 'LineWidth', 2)
 plot(cupSpectrum, emNfindr , 'g', 'LineWidth', 2)
 ylabel('reflectance(%)')
 xlabel('wavelength (nm)')
 title('Chalcedony','FontSize', 20)
-legend('Lib', 'MDC', 'NFINDR')
-sad(emRef, emMdc)
+legend('Lib', 'MVC', 'MDSC', 'NFINDR')
+sad(emRef, emMvc)
 sad(emRef, emNfindr)
 
 subplot(233)
-emMdc = H_test_orig(:,4)/500;
-emNfindr = H_I_orig(:,4)/600;
+emMvc = HMvcOrig(:,4)/500;
+emMvcAscl1_2 = HMdcAscl1_2Orig(:,4)/1000;
+emNfindr = HNfindrOrig(:,4)/1000;
 emRef = cupLib(:,2);
 plot(cupSpectrum, emRef, 'k--', 'LineWidth', 2)
 ylim([0, 1])
 hold on
-plot(cupSpectrum, emMdc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvcAscl1_2, 'b', 'LineWidth', 2)
 plot(cupSpectrum, emNfindr , 'g', 'LineWidth', 2)
 ylabel('reflectance(%)')
 xlabel('wavelength (nm)')
 title('Kaolinite', 'FontSize', 20)
-legend('Lib', 'MDC', 'NFINDR')
-sad(emRef, emMdc)
+legend('Lib', 'MVC', 'MDSC', 'NFINDR')
+sad(emRef, emMvc)
 sad(emRef, emNfindr)
 
 subplot(234)
-emMdc = H_test_orig(:,5)/600;
-emNfindr = H_I_orig(:,5)/600;
+emMvc = HMvcOrig(:,5)/600;
+emMvcAscl1_2 = HMdcAscl1_2Orig(:,5)/600;
+emNfindr = HNfindrOrig(:,5)/600;
 emRef = cupLib(:,1);
 plot(cupSpectrum, emRef, 'k--', 'LineWidth', 2)
 ylim([0, 1])
 hold on
-plot(cupSpectrum, emMdc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvcAscl1_2, 'b', 'LineWidth', 2)
 plot(cupSpectrum, emNfindr, 'g', 'LineWidth', 2)
 ylabel('reflectance(%)')
 xlabel('wavelength (nm)')
 title('Alunite','FontSize', 20)
-legend('Lib', 'MDC', 'NFINDR')
-sad(emRef, emMdc)
+legend('Lib', 'MVC', 'MDSC', 'NFINDR')
+sad(emRef, emMvc)
 sad(emRef, emNfindr)
 
 subplot(235)
-emMdc = H_test_orig(:,8)/400;
-emNfindr = H_I_orig(:,8)/400;
+emMvc = HMvcOrig(:,8)/400;
+emMvcAscl1_2 = HMdcAscl1_2Orig(:,8)/400;
+emNfindr = HNfindrOrig(:,8)/400;
 emRef = cupLib(:,4);
 plot(cupSpectrum, emRef, 'k--', 'LineWidth', 2)
 ylim([0, 1])
 hold on
-plot(cupSpectrum, emMdc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvcAscl1_2, 'b', 'LineWidth', 2)
 plot(cupSpectrum, emNfindr, 'g', 'LineWidth', 2)
 ylabel('reflectance(%)')
 xlabel('wavelength (nm)')
 title('Andradite', 'FontSize', 20)
-legend('Lib', 'MDC', 'NFINDR')
-sad(emRef, emMdc)
+legend('Lib', 'MVC', 'MDSC', 'NFINDR')
+sad(emRef, emMvc)
 sad(emRef, emNfindr)
 
 subplot(236)
-emMdc = H_test_orig(:,9)/400;
-emNfindr = H_I_orig(:,9)/400;
+emMvc = HMvcOrig(:,9)/400;
+emMvcAscl1_2 = HMdcAscl1_2Orig(:,9)/400;
+emNfindr = HNfindrOrig(:,9)/400;
 emRef = cupLib(:,6);
 plot(cupSpectrum, emRef, 'k--', 'LineWidth', 2)
 ylim([0, 1])
 hold on
-plot(cupSpectrum, emMdc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvc, 'r', 'LineWidth', 2)
+plot(cupSpectrum, emMvcAscl1_2, 'b', 'LineWidth', 2)
 plot(cupSpectrum, emNfindr, 'g', 'LineWidth', 2)
 ylabel('reflectance(%)')
 xlabel('wavelength (nm)')
 title('Muscovite', 'FontSize', 20)
-legend('Lib', 'MDC', 'NFINDR')
-sad(emRef, emMdc)
+legend('Lib', 'MVC', 'MDSC', 'NFINDR')
+sad(emRef, emMvc)
 sad(emRef, emNfindr)
-% plot(H_test_orig(:,3)/200, '--', 'LineWidth', 2)
+% plot(HMvcOrig(:,3)/200, '--', 'LineWidth', 2)
 fclose(fileHandle);
