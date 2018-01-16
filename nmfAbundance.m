@@ -59,8 +59,8 @@ Iter_n = 1; % iteration times
         j = j + 1;       
         E(Iter_n) = e2;
             
-        disp_str = ['Iteration ' num2str(Iter_n),...
-                    ' loss = ' num2str(e2)];
+        disp_str = ['[' num2str(Iter_n) ']',...
+                    ' Loss: ' num2str(e2)];
         disp(disp_str);
         Iter_n = Iter_n + 1;
     end
