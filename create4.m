@@ -6,7 +6,7 @@ function [R, W]=create4(M,E)
     for i=1:M
         l(1:N)=1;
         a=drchrnd(l,1);
-        while max(a)>0.9
+        while max(a)>0.8
             a=drchrnd(l,1);
         end
         R(i,:)=a*E;
