@@ -2,7 +2,7 @@
 clear all
 plot_ = false;
 random_ = false;
-expTimes = 10;
+expTimes = 1;
 dataSize = 900;
 noiseLevel = 0.001;
 bandNum = 6;
