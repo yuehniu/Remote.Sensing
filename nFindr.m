@@ -18,6 +18,10 @@ function [endmember_index, V] = nFindr (hyspectral_data, endmember_number)
     [man_val, min_indx]  = min( hyspectral_data(:,1));
     endmember_idx(1) = min_indx;
     endmember_vector(:,1) = hyspectral_data(min_indx, :)';
+    
+    disp_str = ['1th endmember found: [', num2str(endmember_vector(:,1)') ']'];
+    disp(disp_str);
+    
     for i = 2:endmember_number % iteration for endmember
         A = zeros (col_hyper,i-1);
         if i==1 % the first endmember extraction
@@ -58,7 +62,7 @@ function [endmember_index, V] = nFindr (hyspectral_data, endmember_number)
         end
         V_max = 0;
         
-        disp_str = ['Endmember ' num2str(i)];
+        disp_str = [num2str(i) 'th endmember found: [', num2str(endmember_vector(:,i)') ']'];
         disp(disp_str);
     end
     endmember_index = endmember_idx;
