@@ -6,3 +6,6 @@ exp.result/
 
 # data file
 data/
+
+# experiment file for thesis
+resultVisualCode/
