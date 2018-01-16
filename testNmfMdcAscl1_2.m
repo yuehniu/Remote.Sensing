@@ -7,10 +7,10 @@ bandNum = 4;
 endNum = 4;
 HTrue = zeros(endNum, bandNum);
 HI = zeros(endNum, bandNum);
-HMdc = zeros(endNum, bandNum);
+HMdcAscl1_2 = zeros(endNum, bandNum);
 WTrue = zeros(dataSize, endNum);
 WI = zeros(dataSize, endNum);
-WMdc = zeros(dataSize, endNum);
+WMdcAscl1_2 = zeros(dataSize, endNum);
 % for i = 1:exp_times
     % generate true W, H, V
     HTrue = abs( randn( endNum, bandNum ) );
@@ -45,19 +45,21 @@ WMdc = zeros(dataSize, endNum);
     % factorize V using nmf_MDC_simple method
 
 %% mdc test
-    random_ = 0;
+    random_ = 1;
     if random_
-        % HI = abs(randn(size(HI)));
-        % WI = abs(randn(size(WI)));
-        [ WMdc, HMdc, HRecord, E] = ...
+        HI = abs(randn(size(HI)));
+        WI = abs(randn(size(WI)));
+        [ WMdcAscl1_2, HMdcAscl1_2, HRecord, E] = ...
             hyperNmfMdcAscl1_2(...
-                V, endNum, WI, HI, ...
-                0.001, 4,...
-                0.01, 30000 );
-        WMdcRandomInit = WMdc;
-        HMdcRandomInit = HMdc;
+                V, HI, WI, ...
+                0.001, ...
+                20000, ...
+                0.001, ...
+                10 );
+        WMdcRandomInit = WMdcAscl1_2;
+        HMdcRandomInit = HMdcAscl1_2;
     else
-        [ WMdc, HMdc, HRecord, E] = ...
+        [ WMdcAscl1_2, HMdcAscl1_2, HRecord, E] = ...
             hyperNmfMdcAscl1_2(...
                 V, HI, WI, ...
                 0.001,... % tolObj
@@ -65,19 +67,21 @@ WMdc = zeros(dataSize, endNum);
                 0.001, ... % dDelta
                 20 ... % fDelta
             );
-        WMdcWellInit = WMdc;
-        HMdcWellInit = HMdc;
+        WMdcWellInit = WMdcAscl1_2;
+        HMdcWellInit = HMdcAscl1_2;
     end   
     %% visualize rest
-    VNmf = WMdc * HMdc;
+    VNmf = WMdcAscl1_2 * HMdcAscl1_2;
     figure;
+    hold on
     bandIndx1 = 1;
     bandIndx2 = 2;
     scatter(V(:,bandIndx1), V(:,bandIndx2), 'c' ); hold on ; 
     scatter(HTrue(:, bandIndx1), HTrue(:, bandIndx2), 'filled', 'r');
-    scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'b');
+    scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'g');
     scatter( VNmf(:,bandIndx1), VNmf(:,bandIndx2), 5, 'k' );
-    scatter( HMdc(:,bandIndx1), HMdc(:,bandIndx2) , 'filled','k')
+    scatter( HMdcAscl1_2(:,bandIndx1), HMdcAscl1_2(:,bandIndx2) , 'filled','k')
     plot(HRecord(:, 1, bandIndx1), HRecord(:, 1, bandIndx2), 'r-', 'MarkerSize', 5);
     plot(HRecord(:, 2, bandIndx1), HRecord(:, 2, bandIndx2), 'g-', 'MarkerSize', 5);
     plot(HRecord(:, 3, bandIndx1), HRecord(:, 3, bandIndx2), 'b-',  'MarkerSize', 5);
+    plot(HRecord(:, 4, bandIndx1), HRecord(:, 4, bandIndx2), 'm-',  'MarkerSize', 5);

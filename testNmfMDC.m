@@ -45,14 +45,14 @@ WMdc = zeros(dataSize, endNum);
     % factorize V using nmf_MDC_simple method
 
 %% mdc test
-    random_ = 0;
+    random_ = 1;
     if random_
-        % HI = abs(randn(size(HI)));
-        % WI = abs(randn(size(WI)));
+        %HI = abs(randn(size(HI)));
+        %WI = abs(randn(size(WI)));
         [ WMdc, HMdc, HRecord, E] = ...
             hyperNmfMDC(...
                 V, endNum, WI, HI, ...
-                0.001, 4,...
+                0.001, 10,...
                 0.01, 30000 );
         WMdcRandomInit = WMdc;
         HMdcRandomInit = HMdc;
@@ -72,9 +72,10 @@ WMdc = zeros(dataSize, endNum);
     bandIndx2 = 2;
     scatter(V(:,bandIndx1), V(:,bandIndx2), 'c' ); hold on ; 
     scatter(HTrue(:, bandIndx1), HTrue(:, bandIndx2), 'filled', 'r');
-    scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'b');
+    scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'g');
     scatter( VNmf(:,bandIndx1), VNmf(:,bandIndx2), 5, 'k' );
     scatter( HMdc(:,bandIndx1), HMdc(:,bandIndx2) , 'filled','k')
     plot(HRecord(1, :,bandIndx1), HRecord(1, :,bandIndx2), 'r-', 'MarkerSize', 5);
     plot(HRecord(2, :,bandIndx1), HRecord(2, :,bandIndx2), 'g-', 'MarkerSize', 5);
     plot(HRecord(3, :,bandIndx1), HRecord(3, :,bandIndx2), 'b-',  'MarkerSize', 5);
+    plot(HRecord(4, :,bandIndx1), HRecord(4, :,bandIndx2), 'b-',  'MarkerSize', 5);

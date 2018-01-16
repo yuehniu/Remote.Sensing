@@ -45,10 +45,10 @@ WASCL1_2 = zeros(dataSize, emNum);
     % factorize V using nmf_MDC_simple method
 
 %% ASCL1_2 test
-    random_ = 0;
+    random_ = 1;
     if random_
-        % HI = abs(randn(size(HI)));
-        % WI = abs(randn(size(WI)));
+        HI = abs(randn(size(HI)));
+        WI = abs(randn(size(WI)));
         WI = WI ./ ( repmat( sum(WI,2),1, emNum ) );
         [ WASCL1_2, HASCL1_2, HRcL1_2, errRcL1_2, objRcL1_2] = ...
             hyperNmfASCL1_2(...
@@ -77,7 +77,7 @@ WASCL1_2 = zeros(dataSize, emNum);
     bandIndx2 = 2;
     scatter(V(:,bandIndx1), V(:,bandIndx2), 'c' ); hold on ; 
     scatter(HTrue(:, bandIndx1), HTrue(:, bandIndx2), 'filled', 'r');
-    scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'b');
+    scatter(HI(:, bandIndx1), HI(:, bandIndx2), 'filled', 'g');
     scatter( VASCL1_2(bandIndx1,:), VASCL1_2(bandIndx2,:), 5, 'k' );
     scatter( HASCL1_2(bandIndx1, :), HASCL1_2(bandIndx2,:) , 'filled','k')
     
